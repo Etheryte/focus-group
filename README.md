@@ -19,6 +19,7 @@ yarn add @rabasamblik/focus-group
 
 ```tsx
 import { useState } from "react";
+import { FocusGroup } from "@rabasamblik/focus-group";
 
 const Example = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

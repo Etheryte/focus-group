@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Documentation } from "./Documentation";
+import { Examples } from "./Examples";
 
 const DEBUG = false;
 const DebugWrapper = DEBUG ? React.StrictMode : React.Fragment;
@@ -13,6 +13,6 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <DebugWrapper>
-    <Documentation/>
+    <Examples />
   </DebugWrapper>
 );
