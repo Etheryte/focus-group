@@ -1,6 +1,6 @@
 # FocusGroup
 
-`FocusGroup` is a basic building block for constructing menus and interactive UI components that depend on user focusable elements, while keeping accessibility in mind.
+`FocusGroup` is a basic building block for constructing accessible menus and interactive UI components that depend on focusable elements.
 
 ## Installation
 
@@ -12,8 +12,8 @@ yarn add @rabasamblik/focus-group
 
 | Prop | Description | Default value |
 |-|-|-|
-|`onFocusOut`| Optional, function to be called when the user focus moves outside of the container | `undefined`|
-|`...rest`| Any props you can pass to a HTMLDivElement, such as `className` etc | `undefined`|
+|`onFocusOut`| Optional, function to be called when the user focus moves outside of the container. | `undefined`|
+|`...rest`| Any props you can pass to a `HTMLDivElement`, such as `className` etc. | `undefined`|
 
 ## Usage
 
