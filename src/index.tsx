@@ -1,1 +1,1 @@
-export * from "./FocusGroup";
+export * from "./components/FocusGroup";

@@ -2,7 +2,7 @@
   "name": "focus-group",
   "version": "1.0.0",
   "private": false,
-  "main": "dist/index.js",
+  "main": "src/index.tsx",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
