@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    // "outD": "dist/index.js",
     "target": "es5",
     "lib": [
       "dom",
@@ -22,7 +21,7 @@
     "declaration": true
   },
   "include": [
-    "src"
+    "src/lib"
   ],
-  "files": ["src/index.tsx"]
+  "files": ["src/lib/index.tsx"]
 }

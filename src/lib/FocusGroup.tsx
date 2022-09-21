@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 
 type Props = {
-  onFocusOut: () => void;
+  onFocusOut?: () => void;
 } & React.SelectHTMLAttributes<HTMLDivElement>;
 
 export const FocusGroup = ({ onFocusOut, ...rest }: Props) => {
