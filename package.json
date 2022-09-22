@@ -1,6 +1,6 @@
 {
   "name": "@etheryte/focus-group",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": false,
   "main": "dist/index.js",
   "peerDependencies": {
@@ -24,15 +24,11 @@
     "prebuild": "yarn clean",
     "build": "tsc --build",
     "// NPM actions": "",
-    "prepare": "yarn build",
-    "publish": "npm publish --access public"
+    "prepare": "yarn build"
   },
   "directories": {
     "dist": "dist"
   },
-  "files": [
-    "dist"
-  ],
   "eslintConfig": {
     "extends": [
       "react-app",
