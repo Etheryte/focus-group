@@ -47,6 +47,17 @@ const Example = () => {
 };
 ```
 
-## Demo
+## Development
 
-TODO: Add live examples.  
+Run a development demo:
+
+```sh
+yarn start
+```
+
+Publish a new version:
+
+```sh
+npm login
+npm publish --access public
+```

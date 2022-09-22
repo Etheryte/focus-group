@@ -1,6 +1,6 @@
 {
   "name": "@etheryte/focus-group",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": false,
   "main": "dist/index.js",
   "peerDependencies": {
@@ -12,6 +12,7 @@
     "@types/node": "^16.11.59",
     "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
+    "prettier": "2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -23,7 +24,7 @@
     "clean": "rimraf dist",
     "prebuild": "yarn clean",
     "build": "tsc --build",
-    "// NPM actions": "",
+    "// NPM publishing actions": "",
     "prepare": "yarn build"
   },
   "directories": {
