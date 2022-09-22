@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-yarn add @rabasamblik/focus-group
+yarn add @etheryte/focus-group
 ```
 
 ## Props
@@ -19,7 +19,7 @@ yarn add @rabasamblik/focus-group
 
 ```tsx
 import { useState } from "react";
-import { FocusGroup } from "@rabasamblik/focus-group";
+import { FocusGroup } from "@etheryte/focus-group";
 
 const Example = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
