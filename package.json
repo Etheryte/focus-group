@@ -1,7 +1,8 @@
 {
   "name": "@etheryte/focus-group",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
+  "license": "UNLICENSED",
   "main": "dist/index.js",
   "peerDependencies": {
     "react": "^18.2.0",
