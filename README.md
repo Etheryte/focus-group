@@ -28,6 +28,7 @@ const Example = () => {
     <FocusGroup onFocusOut={() => setIsMenuOpen(false)}>
       <button
         id="example-button"
+        aria-haspopup="menu"
         aria-controls="example-menu"
         aria-expanded={isMenuOpen}
         type="button"
