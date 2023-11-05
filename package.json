@@ -1,6 +1,6 @@
 {
   "name": "@etheryte/focus-group",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "private": false,
   "license": "UNLICENSED",
   "main": "dist/index.js",
@@ -35,7 +35,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": "off"
+    }
   },
   "browserslist": {
     "production": [

@@ -1,12 +1,14 @@
-import { Fragment, useState } from "react";
+import React, { useState } from "react";
 
 import { FocusGroup } from "./lib";
 
 const Demo = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [invalidator, setInvalidator] = useState(0);
 
   return (
-    <Fragment>
+    <div key={invalidator}>
+      <button onClick={() => setInvalidator(invalidator + 1)}>invalidate: {invalidator}</button>
       <p>isMenuOpen: {isMenuOpen ? "true" : "false"}</p>
       <FocusGroup onFocusOut={() => setIsMenuOpen(false)}>
         <button
@@ -19,18 +21,23 @@ const Demo = () => {
           Open menu
         </button>
         <menu id="example-menu" aria-label="Example menu" hidden={!isMenuOpen}>
-          <li>Menu item</li>
+          <li>
+            <button onClick={() => console.log("click")}>Menu item</button>
+          </li>
         </menu>
       </FocusGroup>
-    </Fragment>
+    </div>
   );
 };
 
 export const Examples = () => {
+  const [invalidator, setInvalidator] = useState(0);
+
   return (
-    <Fragment>
+    <React.Fragment>
       <h1>Debug</h1>
+      <button onClick={() => setInvalidator(invalidator + 1)}>outer invalidate: {invalidator}</button>
       <Demo />
-    </Fragment>
+    </React.Fragment>
   );
 };

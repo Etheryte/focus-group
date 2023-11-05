@@ -1,25 +1,37 @@
 import * as React from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 
 type Props = {
   onFocusOut?: () => void;
-} & React.SelectHTMLAttributes<HTMLDivElement>;
+  children?: React.ReactNode;
+};
 
-export const FocusGroup = ({ onFocusOut, ...rest }: Props) => {
+export const FocusGroup = (props: Props) => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const childrenRef = useRef<ChildNode[]>([]);
 
   // Work around useCallback not having a cleanup, see https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
   const refCallback = useCallback((node: HTMLDivElement | null) => {
     if (node !== container) {
       setContainer(node);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!container) {
       return;
     }
+
+    /**
+     * We destroy the placeholder wrapping div so we don't mess with the DOM the end user gets
+     * This means we have to cache the children and read them out whenever the node gets recreated
+     */
+    if (document.body.contains(container)) {
+      const children = Array.from(container.childNodes);
+      childrenRef.current = children;
+      container.replaceWith(...children);
+    }
+    const children = childrenRef.current;
 
     // See https://stackoverflow.com/a/38317768/1470607
     let timerId: number | undefined = undefined;
@@ -30,16 +42,16 @@ export const FocusGroup = ({ onFocusOut, ...rest }: Props) => {
     const onContainerFocusOut = () => {
       document.removeEventListener("keydown", onEscape);
       window.clearTimeout(timerId);
-      timerId = window.setTimeout(() => onFocusOut?.(), 0);
+      timerId = window.setTimeout(() => props.onFocusOut?.(), 0);
     };
 
-    const onContainerTouchStart = (event: TouchEvent) => {
+    const onContainerTouchStart = (event: Event) => {
       event.stopPropagation();
       window.clearTimeout(timerId);
     };
     const onBodyTouchStart = () => {
       window.clearTimeout(timerId);
-      timerId = window.setTimeout(() => onFocusOut?.(), 0);
+      timerId = window.setTimeout(() => props.onFocusOut?.(), 0);
     };
 
     const onEscape = (event: KeyboardEvent) => {
@@ -48,17 +60,25 @@ export const FocusGroup = ({ onFocusOut, ...rest }: Props) => {
       }
     };
 
-    container.addEventListener("focusin", onContainerFocusIn);
-    container.addEventListener("focusout", onContainerFocusOut);
-    container.addEventListener("touchstart", onContainerTouchStart);
+    children.forEach((child) => {
+      child.addEventListener("focusin", onContainerFocusIn);
+      child.addEventListener("focusout", onContainerFocusOut);
+      child.addEventListener("touchstart", onContainerTouchStart);
+    });
     document.documentElement.addEventListener("touchstart", onBodyTouchStart);
     return () => {
-      container.removeEventListener("focusin", onContainerFocusIn);
-      container.removeEventListener("focusout", onContainerFocusOut);
-      container.removeEventListener("touchstart", onContainerTouchStart);
+      children.forEach((child) => {
+        child.removeEventListener("focusin", onContainerFocusIn);
+        child.removeEventListener("focusout", onContainerFocusOut);
+        child.removeEventListener("touchstart", onContainerTouchStart);
+      });
       document.documentElement.removeEventListener("touchstart", onBodyTouchStart);
     };
-  }, [container, onFocusOut]);
+  }, [container, props.onFocusOut]);
 
-  return <div {...rest} ref={refCallback} tabIndex={-1} />;
+  return (
+    <div ref={refCallback} tabIndex={-1} role="none">
+      {props.children}
+    </div>
+  );
 };

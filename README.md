@@ -13,7 +13,6 @@ yarn add @etheryte/focus-group
 | Prop | Description | Default value |
 |-|-|-|
 |`onFocusOut`| Optional, function to be called when the user focus moves outside of the container. | `undefined`|
-|`...rest`| Any props you can pass to a `HTMLDivElement`, such as `className` etc. | `undefined`|
 
 ## Usage
 
