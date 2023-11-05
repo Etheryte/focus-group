@@ -32,12 +32,14 @@ const Demo = () => {
 
 export const Examples = () => {
   const [invalidator, setInvalidator] = useState(0);
+  const [isRendered, setIsRendered] = useState(true);
 
   return (
     <React.Fragment>
       <h1>Debug</h1>
       <button onClick={() => setInvalidator(invalidator + 1)}>outer invalidate: {invalidator}</button>
-      <Demo />
+      <button onClick={() => setIsRendered(!isRendered)}>is rendered: {isRendered ? "true" : "false"}</button>
+      {isRendered ? <Demo /> : null}
     </React.Fragment>
   );
 };

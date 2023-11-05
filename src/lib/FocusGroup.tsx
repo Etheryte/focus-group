@@ -19,6 +19,7 @@ export const FocusGroup = (props: Props) => {
 
   useEffect(() => {
     if (!container) {
+      childrenRef.current = [];
       return;
     }
 
@@ -75,6 +76,12 @@ export const FocusGroup = (props: Props) => {
       document.documentElement.removeEventListener("touchstart", onBodyTouchStart);
     };
   }, [container, props.onFocusOut]);
+
+  useEffect(() => {
+    return () => {
+      childrenRef.current = [];
+    };
+  }, []);
 
   return (
     <div ref={refCallback} tabIndex={-1} role="none">
