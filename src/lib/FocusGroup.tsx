@@ -18,38 +18,59 @@ export const FocusGroup = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (!container) {
+    const parentElement = container?.parentElement;
+    if (!container || !parentElement) {
       childrenRef.current = [];
       return;
     }
 
     /**
-     * We destroy the placeholder wrapping div so we don't mess with the DOM the end user gets
-     * This means we have to cache the children and read them out whenever the node gets recreated
+     * We lift the children out of the placeholder wrapping div so we don't mess with the DOM the end user gets.
+     * This means we have to cache the children and read them out whenever the node gets recreated.
      */
-    if (document.body.contains(container)) {
+    if (container.childNodes.length) {
       const children = Array.from(container.childNodes);
-      childrenRef.current = children;
-      container.replaceWith(...children);
+      childrenRef.current = [...childrenRef.current, ...children];
+
+      children.forEach((child) => {
+        if ((child as any)?.getAttribute("data-focus-group")) {
+          return;
+        }
+        child.remove();
+        parentElement.insertBefore(child, container);
+      });
+
+      container.removeChild = <T extends Node>(target: T) => {
+        if (target.parentNode === container) {
+          return container.removeChild(target);
+        }
+        return target.parentNode?.removeChild(target) ?? target;
+      };
+
+      // NB! This node can't be removed or React will flip the table
+      container.style.display = "none";
     }
     const children = childrenRef.current;
 
     // See https://stackoverflow.com/a/38317768/1470607
     let timerId: number | undefined = undefined;
-    const onContainerFocusIn = () => {
+
+    const onChildFocusIn = () => {
       document.addEventListener("keydown", onEscape);
       window.clearTimeout(timerId);
     };
-    const onContainerFocusOut = () => {
+
+    const onChildFocusOut = () => {
       document.removeEventListener("keydown", onEscape);
       window.clearTimeout(timerId);
       timerId = window.setTimeout(() => props.onFocusOut?.(), 0);
     };
 
-    const onContainerTouchStart = (event: Event) => {
+    const onChildTouchStart = (event: Event) => {
       event.stopPropagation();
       window.clearTimeout(timerId);
     };
+
     const onBodyTouchStart = () => {
       window.clearTimeout(timerId);
       timerId = window.setTimeout(() => props.onFocusOut?.(), 0);
@@ -57,21 +78,22 @@ export const FocusGroup = (props: Props) => {
 
     const onEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onContainerFocusOut();
+        onChildFocusOut();
       }
     };
 
     children.forEach((child) => {
-      child.addEventListener("focusin", onContainerFocusIn);
-      child.addEventListener("focusout", onContainerFocusOut);
-      child.addEventListener("touchstart", onContainerTouchStart);
+      child.addEventListener("focusin", onChildFocusIn);
+      child.addEventListener("focusout", onChildFocusOut);
+      child.addEventListener("touchstart", onChildTouchStart);
     });
     document.documentElement.addEventListener("touchstart", onBodyTouchStart);
+
     return () => {
       children.forEach((child) => {
-        child.removeEventListener("focusin", onContainerFocusIn);
-        child.removeEventListener("focusout", onContainerFocusOut);
-        child.removeEventListener("touchstart", onContainerTouchStart);
+        child.removeEventListener("focusin", onChildFocusIn);
+        child.removeEventListener("focusout", onChildFocusOut);
+        child.removeEventListener("touchstart", onChildTouchStart);
       });
       document.documentElement.removeEventListener("touchstart", onBodyTouchStart);
     };
@@ -79,12 +101,15 @@ export const FocusGroup = (props: Props) => {
 
   useEffect(() => {
     return () => {
+      childrenRef.current.forEach((child) => {
+        child.remove();
+      });
       childrenRef.current = [];
     };
   }, []);
 
   return (
-    <div ref={refCallback} tabIndex={-1} role="none">
+    <div data-focus-group ref={refCallback} tabIndex={-1} role="none">
       {props.children}
     </div>
   );

@@ -30,6 +30,26 @@ const Demo = () => {
   );
 };
 
+const NestedDemo = () => {
+  const [isOuterOpen, setIsOuterOpen] = useState(false);
+  const [isInnerOpen, setIsInnerOpen] = useState(false);
+
+  return (
+    <FocusGroup onFocusOut={() => setIsOuterOpen(false)}>
+      <button onClick={() => setIsOuterOpen(!isOuterOpen)}>toggle outer: {isOuterOpen ? "true" : "false"}</button>
+      {isOuterOpen ? (
+        <div>
+          outer content
+          <FocusGroup onFocusOut={() => setIsInnerOpen(false)}>
+            <button onClick={() => setIsInnerOpen(!isInnerOpen)}>toggle inner: {isInnerOpen ? "true" : "false"}</button>
+            {isInnerOpen ? <div>inner content</div> : null}
+          </FocusGroup>
+        </div>
+      ) : null}
+    </FocusGroup>
+  );
+};
+
 export const Examples = () => {
   const [invalidator, setInvalidator] = useState(0);
   const [isRendered, setIsRendered] = useState(true);
@@ -40,6 +60,9 @@ export const Examples = () => {
       <button onClick={() => setInvalidator(invalidator + 1)}>outer invalidate: {invalidator}</button>
       <button onClick={() => setIsRendered(!isRendered)}>is rendered: {isRendered ? "true" : "false"}</button>
       {isRendered ? <Demo /> : null}
+      <div style={{ height: "30px" }} />
+      {isRendered ? <NestedDemo /> : null}
+      <div>content after</div>
     </React.Fragment>
   );
 };
